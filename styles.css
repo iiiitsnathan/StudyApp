@@ -135,9 +135,8 @@ abbr[title] { text-decoration: underline dotted; text-underline-offset: 3px; cur
 .entrance { background: var(--plate); color: var(--on-plate); display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: clamp(24px, 3.5vw, 44px); row-gap: 22px; padding-right: clamp(24px, 4vw, 48px); }
 .entrance .pict { grid-row: 1 / span 3; align-self: start; }
 .entrance > :not(.pict) { grid-column: 2; }
-.entrance h1 { padding-top: clamp(28px, 4vw, 44px); }
 .entrance .hero-actions { padding-bottom: clamp(28px, 4vw, 44px); }
-.entrance h1 { max-width: 11ch; color: var(--on-plate); }
+.entrance h1 { max-width: 11ch; padding-top: clamp(28px, 4vw, 44px); color: var(--on-plate); }
 .entrance .lede { color: var(--on-plate-2); max-width: 44ch; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 4px; }
 .entrance .text-link { color: var(--yellow); font-family: var(--sign); font-weight: 700; font-stretch: 92%; }

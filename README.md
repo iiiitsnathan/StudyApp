@@ -24,8 +24,8 @@ It is plain HTML, CSS and JavaScript. No build step.
 | Specialty cards (name, likelihood, blurb, example, links) | `SPECIALTIES` array in `script.js` |
 | "Has AI been part of your care?" checklist | `QUIZ` array in `script.js` |
 | Trial numbers in the detection-rate chart | `EVIDENCE` array in `script.js` |
-| Pew survey ranked list | `PEW` array in `script.js` |
-| Wikipedia background links | `WIKI` array in `script.js` |
+| Pew survey ranked list | `#patients` section in `index.html` (keep it sorted) |
+| Wikipedia background links | `#sources` section in `index.html` |
 | Colors, fonts, layout | tokens at the top of `styles.css` |
 
 Bracketed citations in the page (`[3]`) link to `#src-3` in the Sources section, so keep the numbering in sync if you add or remove a source.
