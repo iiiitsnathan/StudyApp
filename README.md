@@ -24,7 +24,7 @@ It is plain HTML, CSS and JavaScript. No build step.
 | Specialty cards (name, likelihood, blurb, example, links) | `SPECIALTIES` array in `script.js` |
 | "Has AI been part of your care?" checklist | `QUIZ` array in `script.js` |
 | Trial numbers in the detection-rate chart | `EVIDENCE` array in `script.js` |
-| Pew survey tiles | `PEW` array in `script.js` |
+| Pew survey ranked list | `PEW` array in `script.js` |
 | Wikipedia background links | `WIKI` array in `script.js` |
 | Colors, fonts, layout | tokens at the top of `styles.css` |
 
@@ -32,4 +32,4 @@ Bracketed citations in the page (`[3]`) link to `#src-3` in the Sources section,
 
 ## Credits
 
-Fonts from Google Fonts (Bricolage Grotesque, Atkinson Hyperlegible, IBM Plex Mono). The endoscopy view is an illustration, not a patient image. Educational only, not medical advice.
+Fonts from Google Fonts (Archivo, Atkinson Hyperlegible). The endoscopy view is an illustration, not a patient image. Educational only, not medical advice.

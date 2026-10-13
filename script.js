@@ -4,18 +4,8 @@
   "use strict";
 
   const $ = (sel, root) => (root || document).querySelector(sel);
-  const el = (tag, attrs, children) => {
-    const node = document.createElement(tag);
-    if (attrs) for (const k in attrs) {
-      if (k === "class") node.className = attrs[k];
-      else if (k === "html") node.innerHTML = attrs[k];
-      else if (k === "text") node.textContent = attrs[k];
-      else node.setAttribute(k, attrs[k]);
-    }
-    (children || []).forEach((c) => node.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
-    return node;
-  };
-  const cite = (n) => `<sup class="cite"><a href="#src-${n}">[${n}]</a></sup>`;
+  const src = (n) => `<a href="#src-${n}" aria-label="Source ${n}">[${n}]</a>`;
+  const cite = (n) => `<sup class="cite">${src(n)}</sup>`;
 
   /* ------------------------------------------------------------------
      Icons: small line drawings, 24x24, stroke only
@@ -198,39 +188,53 @@
     },
   ];
 
+  /* The directory groups departments into hospital wings; the grouping is
+     a reading aid, not a claim about any real building. */
+  const WINGS = [
+    ["imaging", "Imaging and labs", ["radiology", "pathology", "ophtho", "derm"]],
+    ["procedures", "Procedures", ["gi", "cardiology", "surgery"]],
+    ["acute", "Emergency and inpatient", ["er", "icu"]],
+    ["clinics", "Clinics", ["primary", "oncology", "endo"]],
+    ["behind", "Behind the scenes", ["research", "pharma"]],
+  ];
+  const wingOf = (id) => WINGS.find(([, , ids]) => ids.includes(id))[0];
+
   function renderSpecialties() {
     const grid = $("#spec-grid");
     const detail = $("#spec-detail");
-    if (!grid || !detail) return;
-    let active = location.hash === "#gi" ? "gi" : "radiology";
+    const arrow = `<svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>`;
 
     const show = (id) => {
       const s = SPECIALTIES.find((x) => x.id === id);
-      if (!s) return;
-      active = id;
-      grid.querySelectorAll(".spec-card").forEach((b) => b.setAttribute("aria-pressed", b.dataset.id === id ? "true" : "false"));
+      grid.querySelectorAll(".dir-row").forEach((b) => b.setAttribute("aria-pressed", b.dataset.id === id ? "true" : "false"));
       detail.innerHTML = `
-        <div class="main">
-          <span class="chip l${s.level}">${LEVELS[s.level]}</span>
-          <h3>${s.name}</h3>
-          <p>${s.how}</p>
+        <div class="door-head w-${wingOf(id)}">
+          <span class="tag">${ICONS[s.icon]}</span>
+          <div><h3>${s.name}</h3><p>${s.tag}</p></div>
+          <span class="lik">${LEVELS[s.level]}</span>
         </div>
-        <div class="side">
+        <div class="door-body">
+          <p class="how">${s.how}</p>
           <div><h4>A real example</h4><div class="example">${s.example}</div></div>
           <div><h4>Read more</h4><ul class="links">${s.links.map(([t, u]) => `<li><a href="${u}"${u.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}>${t}</a></li>`).join("")}</ul></div>
         </div>`;
     };
 
-    SPECIALTIES.forEach((s) => {
-      const b = el("button", { type: "button", class: "spec-card", "data-id": s.id, "aria-pressed": "false", role: "listitem" });
-      b.innerHTML = `<span class="icon">${ICONS[s.icon]}</span><span class="name">${s.name}</span><span class="chip l${s.level}">${LEVELS[s.level]}</span><span class="tag">${s.tag}</span>`;
-      b.addEventListener("click", () => {
-        show(s.id);
-        if (window.matchMedia("(max-width: 900px)").matches) detail.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-      grid.appendChild(b);
+    grid.innerHTML = WINGS.map(([w, label, ids]) => `
+      <li class="wing w-${w}"><h3>${label}</h3><ul>${ids.map((id) => {
+        const s = SPECIALTIES.find((x) => x.id === id);
+        return `<li><button type="button" class="dir-row" data-id="${s.id}" aria-pressed="false"><span class="tag">${ICONS[s.icon]}</span><span class="name">${s.name}</span><span class="lik l${s.level}">${LEVELS[s.level]}</span>${arrow}</button></li>`;
+      }).join("")}</ul></li>`).join("");
+    grid.addEventListener("click", (e) => {
+      const b = e.target.closest(".dir-row");
+      if (!b) return;
+      show(b.dataset.id);
+      if (matchMedia("(max-width: 900px)").matches) {
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        detail.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      }
     });
-    show(active);
+    show(location.hash === "#gi" ? "gi" : "radiology");
   }
 
   /* ------------------------------------------------------------------
@@ -251,12 +255,7 @@
 
   function renderQuiz() {
     const box = $("#quiz-items");
-    if (!box) return;
-    QUIZ.forEach((q) => {
-      const label = el("label", { class: "check", for: "q-" + q.id });
-      label.innerHTML = `<input type="checkbox" id="q-${q.id}" name="${q.id}"><span>${q.label}</span>`;
-      box.appendChild(label);
-    });
+    box.insertAdjacentHTML("beforeend", QUIZ.map((q) => `<label class="check" for="q-${q.id}"><input type="checkbox" id="q-${q.id}" name="${q.id}"><span>${q.label}</span></label>`).join(""));
     const verdict = $("#quiz-verdict"), empty = $("#quiz-empty"), why = $("#quiz-why");
     const update = () => {
       const picked = QUIZ.filter((q) => $("#q-" + q.id).checked);
@@ -281,7 +280,6 @@
      ------------------------------------------------------------------ */
   function initAdr() {
     const r = $("#adr");
-    if (!r) return;
     const val = $("#adr-val"), risk = $("#adr-risk"), tier = $("#adr-tier"), meter = $("#adr-meter");
     const update = () => {
       const adr = +r.value;
@@ -291,6 +289,8 @@
       risk.textContent = pct === 0 ? "same" : (pct > 0 ? `−${pct}%` : `+${Math.abs(pct)}%`);
       tier.textContent = adr < 25 ? "Below benchmark" : adr < 35 ? "Meets benchmark" : adr < 45 ? "Strong" : "Elite";
       meter.style.width = Math.min(100, Math.round(rel * 100)) + "%";
+      const said = pct === 0 ? "same interval cancer risk as the benchmark" : `${Math.abs(pct)}% ${pct > 0 ? "lower" : "higher"} interval cancer risk than the benchmark`;
+      r.setAttribute("aria-valuetext", `${adr}% detection rate, ${said}, ${tier.textContent.toLowerCase()}`);
     };
     r.addEventListener("input", update);
     update();
@@ -301,7 +301,6 @@
      ------------------------------------------------------------------ */
   function initDemo() {
     const hero = $("#hero-scope"), slot = $("#demo-scope"), toggle = $("#ai-toggle"), count = $("#det-count");
-    if (!hero || !slot || !toggle) return;
     const svg = hero.cloneNode(true);
     svg.id = "demo-scope-svg";
     svg.classList.remove("loop");
@@ -312,7 +311,7 @@
     const apply = () => {
       const on = toggle.checked;
       svg.classList.toggle("ai-on", on);
-      if (state) state.textContent = on ? "CADe · ON" : "CADe · OFF";
+      state.textContent = on ? "CADe · ON" : "CADe · OFF";
       count.textContent = on ? "2" : "0";
     };
     toggle.addEventListener("change", apply);
@@ -331,7 +330,6 @@
   ];
   function renderEvidence() {
     const rows = $("#evidence-rows"), table = $("#evidence-table");
-    if (!rows) return;
     const MAX = 80;
     rows.innerHTML = EVIDENCE.map((d) => `
       <div class="row">
@@ -341,13 +339,13 @@
           <div class="bar s1" title="With AI: ${d.b}%"><i style="--w:${(d.b / MAX) * 100}%"></i><b>${d.b}%</b></div>
         </div>
       </div>`).join("");
-    if (table) table.innerHTML = `<thead><tr><th>Measure</th><th class="num">Without AI</th><th class="num">With AI</th><th class="num">Change</th><th>Source</th></tr></thead><tbody>${
-      EVIDENCE.map((d) => `<tr><td>${d.label}<br><small>${d.sub}</small></td><td class="num">${d.a}%</td><td class="num">${d.b}%</td><td class="num">+${(d.b - d.a).toFixed(1)} pts</td><td><a href="#src-${d.src}">[${d.src}]</a></td></tr>`).join("")
+    table.innerHTML = `<thead><tr><th scope="col">Measure</th><th scope="col" class="num">Without AI</th><th scope="col" class="num">With AI</th><th scope="col" class="num">Change</th><th scope="col">Source</th></tr></thead><tbody>${
+      EVIDENCE.map((d) => `<tr><td>${d.label}<br><small>${d.sub}</small></td><td class="num">${d.a}%</td><td class="num">${d.b}%</td><td class="num">+${(d.b - d.a).toFixed(1)} pts</td><td>${src(d.src)}</td></tr>`).join("")
     }</tbody>`;
   }
 
   /* ------------------------------------------------------------------
-     Pew tiles
+     Pew survey, ranked as a bar list
      ------------------------------------------------------------------ */
   const PEW = [
     { v: 72, t: "say it is extremely or very important that a provider tells them when AI is used in their care", s: 9 },
@@ -358,9 +356,7 @@
     { v: 34, t: "use AI chatbots for their own health questions anyway", s: 9 },
   ];
   function renderPew() {
-    const g = $("#pew-grid");
-    if (!g) return;
-    g.innerHTML = PEW.map((p) => `<div class="pew"><span class="value">${p.v}%</span><span class="bar" aria-hidden="true"><i style="--w:${p.v}%"></i></span><span class="label">${p.t} <a href="#src-${p.s}">[${p.s}]</a></span></div>`).join("");
+    $("#pew-grid").innerHTML = [...PEW].sort((a, b) => b.v - a.v).map((p) => `<li class="pew"><b class="value">${p.v}%</b><span class="label">${p.t} ${src(p.s)}</span><span class="bar" aria-hidden="true"><i style="--w:${p.v}%"></i></span></li>`).join("");
   }
 
   /* ------------------------------------------------------------------
@@ -390,9 +386,7 @@
     ["Informed consent", "Informed_consent"],
   ];
   function renderWiki() {
-    const ul = $("#wiki-list");
-    if (!ul) return;
-    ul.innerHTML = WIKI.map(([t, s]) => `<li><span><a href="${WP(s)}" target="_blank" rel="noopener">${t}</a> <span class="wiki">en.wikipedia.org</span></span></li>`).join("");
+    $("#wiki-list").innerHTML = WIKI.map(([t, s]) => `<li><span><a href="${WP(s)}" target="_blank" rel="noopener">${t}</a> <span class="wiki">en.wikipedia.org</span></span></li>`).join("");
   }
 
   /* ------------------------------------------------------------------
@@ -400,39 +394,35 @@
      ------------------------------------------------------------------ */
   function initCopy() {
     const btn = $("#copy-questions"), status = $("#copy-status"), list = $("#ask-list");
-    if (!btn || !list) return;
     btn.addEventListener("click", () => {
       const text = [...list.querySelectorAll("q")].map((q, i) => `${i + 1}. ${q.textContent}`).join("\n");
-      const done = () => { status.textContent = "Copied. Paste it into your notes app."; setTimeout(() => (status.textContent = ""), 4000); };
-      const fallback = () => {
-        const ta = el("textarea", { readonly: "readonly", style: "position:fixed;opacity:0" });
-        ta.value = text; document.body.appendChild(ta); ta.select();
-        try { document.execCommand("copy"); done(); } catch (e) { status.textContent = "Select the questions above and copy them manually."; }
-        ta.remove();
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(fallback);
-      else fallback();
+      navigator.clipboard.writeText(text).then(
+        () => { status.textContent = "Copied. Paste it into your notes app."; setTimeout(() => (status.textContent = ""), 4000); },
+        () => { status.textContent = "Select the questions above and copy them manually."; }
+      );
     });
+    $("#print-card").addEventListener("click", () => print());
   }
 
   /* ------------------------------------------------------------------
      Nav: highlight the section in view
      ------------------------------------------------------------------ */
   function initNav() {
-    const links = [...document.querySelectorAll(".topbar nav a")];
-    if (!links.length || !("IntersectionObserver" in window)) return;
-    const byId = {};
-    links.forEach((a) => (byId[a.getAttribute("href").slice(1)] = a));
+    const nav = $(".topbar nav");
+    const links = [...nav.querySelectorAll("a")];
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        if (e.isIntersecting) {
-          links.forEach((a) => a.removeAttribute("aria-current"));
-          const a = byId[e.target.id];
-          if (a) { a.setAttribute("aria-current", "true"); a.scrollIntoView({ block: "nearest", inline: "nearest" }); }
-        }
+        if (!e.isIntersecting) return;
+        const a = links.find((l) => l.hash === "#" + e.target.id);
+        links.forEach((l) => l.removeAttribute("aria-current"));
+        if (!a) return;
+        a.setAttribute("aria-current", "true");
+        // Scroll only the nav strip sideways. scrollIntoView would also move the page.
+        const r = a.getBoundingClientRect(), n = nav.getBoundingClientRect();
+        if (r.left < n.left || r.right > n.right) nav.scrollLeft += r.left - n.left - 8;
       });
     }, { rootMargin: "-40% 0px -55% 0px" });
-    Object.keys(byId).forEach((id) => { const s = document.getElementById(id); if (s) io.observe(s); });
+    document.querySelectorAll("main > section, main > .hero").forEach((sec) => io.observe(sec));
   }
 
   renderSpecialties();
