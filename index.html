@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Is my doctor using AI?</title>
+<meta name="description" content="A visual, sourced guide to where artificial intelligence already shows up in medical care, specialty by specialty, with a deep dive on AI-assisted colonoscopy.">
+<meta property="og:title" content="Is my doctor using AI?">
+<meta property="og:description" content="Probably. Usually quietly. Where AI shows up in your care, what it does, and the one procedure where the evidence is strongest.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2307090b'/%3E%3Crect x='7' y='7' width='18' height='18' rx='3' fill='none' stroke='%2319d17a' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Shared gradients and clip paths for the scope illustration -->
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <clipPath id="scopeClip"><circle cx="300" cy="300" r="280"/></clipPath>
+    <radialGradient id="mucosa" cx="0.45" cy="0.52" r="0.62">
+      <stop offset="0" stop-color="#4a1b20"/>
+      <stop offset="0.22" stop-color="#8c3a41"/>
+      <stop offset="0.48" stop-color="#c9646b"/>
+      <stop offset="0.78" stop-color="#df8c8f"/>
+      <stop offset="1" stop-color="#e8a2a1"/>
+    </radialGradient>
+    <radialGradient id="lumen" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#160709"/>
+      <stop offset="0.55" stop-color="#2d0f12" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#4a1b20" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="polypGrad" cx="0.38" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#f0b3b5"/>
+      <stop offset="0.5" stop-color="#d07077"/>
+      <stop offset="1" stop-color="#9c3b45"/>
+    </radialGradient>
+    <radialGradient id="flatGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f3c9c4" stop-opacity="0.95"/>
+      <stop offset="0.7" stop-color="#eeb9b6" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#e6a7a6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.6" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.62"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot" aria-hidden="true"></span>Is my doctor using AI?</a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#answer">Short answer</a></li>
+        <li><a href="#specialties">By specialty</a></li>
+        <li><a href="#check">Check yourself</a></li>
+        <li><a href="#colonoscopy">Colonoscopy</a></li>
+        <li><a href="#catch">The catch</a></li>
+        <li><a href="#patients">Patients</a></li>
+        <li><a href="#ask">Ask your doctor</a></li>
+        <li><a href="#sources">Sources</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">A passion project about AI in medicine</p>
+      <h1>Is my doctor using AI?</h1>
+      <p class="lede">Probably. Usually quietly. This page walks through where artificial intelligence already shows up in your care, what it actually does, and the one procedure where the evidence is strongest: the colonoscopy.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#check">Check your own care</a>
+        <a class="btn" href="#colonoscopy">Jump to the colonoscopy</a>
+      </div>
+      <div class="hero-meta">
+        <span>Built by Nathan</span>
+        <span>Updated October 2026</span>
+        <span>Sources at the bottom, Wikipedia style</span>
+      </div>
+    </div>
+
+    <figure class="scope-frame">
+      <svg id="hero-scope" class="scope loop" viewBox="0 0 600 600" role="img" aria-label="Illustration of a colonoscopy camera view. A green box appears around a polyp and around a flat lesion, the way computer-aided detection marks them on the monitor.">
+        <circle cx="300" cy="300" r="286" fill="#07090b"/>
+        <g clip-path="url(#scopeClip)">
+          <rect width="600" height="600" fill="url(#mucosa)"/>
+          <!-- haustral folds -->
+          <g fill="none" stroke="#9a3c46">
+            <ellipse cx="290" cy="320" rx="262" ry="250" stroke-opacity="0.5" stroke-width="26"/>
+            <ellipse cx="284" cy="316" rx="205" ry="196" stroke-opacity="0.5" stroke-width="22"/>
+            <ellipse cx="278" cy="312" rx="152" ry="146" stroke-opacity="0.55" stroke-width="18"/>
+            <ellipse cx="272" cy="309" rx="106" ry="100" stroke-opacity="0.6" stroke-width="14"/>
+            <ellipse cx="268" cy="306" rx="68" ry="62" stroke-opacity="0.65" stroke-width="10"/>
+          </g>
+          <g fill="none" stroke="#f2b9b8">
+            <ellipse cx="285" cy="314" rx="262" ry="250" stroke-opacity="0.28" stroke-width="6"/>
+            <ellipse cx="279" cy="310" rx="205" ry="196" stroke-opacity="0.28" stroke-width="5"/>
+            <ellipse cx="273" cy="306" rx="152" ry="146" stroke-opacity="0.3" stroke-width="4"/>
+            <ellipse cx="268" cy="304" rx="106" ry="100" stroke-opacity="0.3" stroke-width="3"/>
+          </g>
+          <!-- vessels -->
+          <g fill="none" stroke="#b23a3f" stroke-opacity="0.42" stroke-width="2.2" stroke-linecap="round">
+            <path d="M96 420 C150 392 190 410 236 372 S300 330 320 338"/>
+            <path d="M150 404 C176 380 200 396 222 384"/>
+            <path d="M470 180 C440 214 420 206 398 236 S360 276 346 300"/>
+            <path d="M432 214 C424 236 408 240 404 258"/>
+            <path d="M120 250 C160 262 186 288 214 290"/>
+            <path d="M330 520 C340 480 360 470 372 440 S392 404 400 396"/>
+            <path d="M520 360 C500 372 490 360 472 370 S444 390 430 384"/>
+          </g>
+          <!-- flat sessile serrated lesion (subtle) -->
+          <ellipse cx="186" cy="214" rx="40" ry="23" fill="url(#flatGrad)"/>
+          <g fill="#e39f9f" fill-opacity="0.5">
+            <circle cx="176" cy="210" r="1.6"/><circle cx="190" cy="206" r="1.4"/><circle cx="198" cy="218" r="1.6"/><circle cx="182" cy="222" r="1.3"/>
+          </g>
+          <!-- round polyp -->
+          <ellipse cx="420" cy="364" rx="36" ry="13" fill="#3d0f13" fill-opacity="0.55"/>
+          <circle cx="412" cy="336" r="31" fill="url(#polypGrad)"/>
+          <ellipse cx="401" cy="322" rx="9" ry="5.5" fill="#fff" fill-opacity="0.5" transform="rotate(-20 401 322)"/>
+          <!-- lumen -->
+          <ellipse cx="268" cy="306" rx="76" ry="66" fill="url(#lumen)"/>
+          <!-- light reflections + vignette -->
+          <ellipse cx="150" cy="130" rx="64" ry="30" fill="#fff" fill-opacity="0.11" transform="rotate(-32 150 130)"/>
+          <ellipse cx="470" cy="470" rx="40" ry="18" fill="#fff" fill-opacity="0.07" transform="rotate(-32 470 470)"/>
+          <rect width="600" height="600" fill="url(#vignette)"/>
+        </g>
+        <!-- monitor HUD -->
+        <g class="hud">
+          <path d="M70 26 H46 a20 20 0 0 0 -20 20 V70"/>
+          <path d="M530 26 H554 a20 20 0 0 1 20 20 V70"/>
+          <path d="M70 574 H46 a20 20 0 0 1 -20 -20 V530"/>
+          <path d="M530 574 H554 a20 20 0 0 0 20 -20 V530"/>
+          <circle cx="90" cy="47" r="4" fill="#19d17a"/>
+          <text class="ai-state" x="102" y="52">CADe · LIVE</text>
+          <text x="498" y="52" text-anchor="end">WD 07:42</text>
+          <text x="92" y="560">1080p · 30 fps</text>
+          <text x="498" y="560" text-anchor="end">latency 38 ms</text>
+        </g>
+        <!-- detections -->
+        <g class="det det-1">
+          <rect class="box" x="372" y="296" width="82" height="82" rx="8"/>
+          <rect class="tag" x="372" y="272" width="98" height="22" rx="4"/>
+          <text x="380" y="288">polyp 0.94</text>
+        </g>
+        <g class="det det-2">
+          <rect class="box" x="142" y="186" width="90" height="58" rx="8"/>
+          <rect class="tag" x="142" y="162" width="98" height="22" rx="4"/>
+          <text x="150" y="178">polyp 0.71</text>
+        </g>
+      </svg>
+      <figcaption>What an endoscopist sees with computer-aided detection: a green box over a suspected polyp, drawn in under 40 ms. Illustration, not a real patient.</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- ================= SHORT ANSWER ================= -->
+<section id="answer">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The short answer</p>
+      <h2>Yes, and you probably didn't notice.</h2>
+      <p class="lede">Only 16% of U.S. adults know AI has been used in their own care,<sup class="cite"><a href="#src-9">[9]</a></sup> yet the FDA has authorized well over a thousand AI-enabled medical devices,<sup class="cite"><a href="#src-11">[11]</a></sup> and most large hospital systems run prediction models on every admission. It hides in three places.</p>
+    </div>
+
+    <div class="three">
+      <article>
+        <p class="when">Before you walk in</p>
+        <h3>Scheduling, billing, and chart review</h3>
+        <p>Language models read clinical notes to pull out lab values, symptoms, and trial eligibility. At Mass General Brigham, a tool called RECTIFIER screens charts for clinical trials, catches urgent findings buried in notes with up to 98% accuracy, and nearly doubled enrollment in a randomized trial of about 4,500 patients.<sup class="cite"><a href="#src-12">[12]</a></sup></p>
+      </article>
+      <article>
+        <p class="when">When you're imaged</p>
+        <h3>Scans, slides, and retinal photos</h3>
+        <p>About three in four FDA-authorized AI devices are radiology tools.<sup class="cite"><a href="#src-11">[11]</a></sup> Convolutional neural networks flag nodules, bleeds, and fractures. Pathology AI reads biopsy slides, detecting colorectal cancer with an <abbr title="Area under the curve, a 0 to 1 accuracy score">AUC</abbr> of 0.988 against 0.970 for expert pathologists.</p>
+      </article>
+      <article>
+        <p class="when">During a procedure</p>
+        <h3>Scopes and operating rooms</h3>
+        <p>Real-time detection draws boxes around polyps during a colonoscopy, and computer vision tracks instruments and anatomy in robot-assisted surgery. This is the newest and least invisible kind of medical AI, and the focus of this page.</p>
+      </article>
+    </div>
+
+    <div class="fact-strip">
+      <div class="fact"><span class="value">1,000+</span><span class="label">AI-enabled medical devices authorized by the FDA</span><span class="src">FDA device list <a href="#src-11">[11]</a></span></div>
+      <div class="fact"><span class="value">~3 in 4</span><span class="label">of those devices are for radiology</span><span class="src">FDA device list <a href="#src-11">[11]</a></span></div>
+      <div class="fact"><span class="value">16%</span><span class="label">of U.S. adults know AI has been used in their care</span><span class="src">Pew Research Center, 2026 <a href="#src-9">[9]</a></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SPECIALTIES ================= -->
+<section id="specialties">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Field guide</p>
+      <h2>Where AI is working, specialty by specialty</h2>
+      <p class="lede">Pick a specialty. Each one says how likely you are to have met AI there, what it does, one real example, and where to read more.</p>
+    </div>
+    <div class="spec-grid" id="spec-grid" role="list"></div>
+    <div class="spec-detail" id="spec-detail" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= CHECK YOURSELF ================= -->
+<section id="check">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Try it</p>
+      <h2>Has AI already been part of your care?</h2>
+      <p class="lede">Tick what applies. The answer updates as you go. Nothing is stored or sent anywhere.</p>
+    </div>
+    <div class="quiz">
+      <form id="quiz-form" novalidate>
+        <fieldset id="quiz-items">
+          <legend>In the last few years, have you…</legend>
+        </fieldset>
+      </form>
+      <div class="quiz-result" id="quiz-result" aria-live="polite">
+        <p class="eyebrow">Your result</p>
+        <p class="verdict" id="quiz-verdict">Nothing checked yet</p>
+        <p class="empty" id="quiz-empty">Even with nothing ticked, the back office that scheduled your last visit and coded the bill almost certainly used some machine learning.</p>
+        <ul class="why" id="quiz-why"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLONOSCOPY ================= -->
+<section id="colonoscopy">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Deep dive</p>
+      <h2>The colonoscopy: where the evidence is strongest</h2>
+      <p class="lede">Colonoscopy is the best test case for medical AI. It is live video, it depends entirely on one person's eyes, and the thing being looked for, a precancerous polyp, is small, pale, and easy to hide behind a fold.</p>
+    </div>
+
+    <div class="deep">
+
+      <!-- A. why it matters -->
+      <div class="deep-block">
+        <div class="prose">
+          <h3>One number decides how good a colonoscopy is</h3>
+          <p>Colorectal cancer is one of the leading causes of cancer death worldwide, and it is largely preventable: find the polyp, remove it, and the cancer never forms. The score every endoscopist is judged by is the <strong>adenoma detection rate</strong>, or ADR: the share of screening colonoscopies in which at least one precancerous adenoma is found.</p>
+          <p>In a landmark 2014 study in the <em>New England Journal of Medicine</em>, each 1-point rise in a doctor's ADR cut their patients' risk of an <strong>interval cancer</strong>, one that appears between screenings, by about 3%.<sup class="cite"><a href="#src-1">[1]</a></sup> The professional benchmark is 25%. Elite endoscopists reach 35 to 50% by washing the lining, flattening folds, and withdrawing the scope slowly for six to nine minutes.</p>
+          <p>Yet in tandem studies, where a second colonoscopy immediately follows the first, 25 to 35% of adenomas turn out to have been missed, usually because they were flat, tiny, hidden behind a fold, or seen late on a long day.<sup class="cite"><a href="#src-4">[4]</a></sup></p>
+        </div>
+        <div class="panel">
+          <h4>Try it: what one point of ADR is worth</h4>
+          <div class="adr-row">
+            <label for="adr">Your endoscopist's ADR</label>
+            <div class="big"><span id="adr-val">25</span><small>%</small></div>
+          </div>
+          <input type="range" id="adr" min="15" max="60" step="1" value="25" aria-describedby="adr-note">
+          <div class="ticks"><span>15%</span><span>25% benchmark</span><span>40%</span><span>60%</span></div>
+          <div class="readout">
+            <div><span class="v" id="adr-risk">0%</span><span class="k">interval cancer risk vs. the 25% benchmark</span></div>
+            <div><span class="v" id="adr-tier">At benchmark</span><span class="k">how this endoscopist compares</span></div>
+          </div>
+          <div class="meter" aria-hidden="true"><i id="adr-meter" style="width:100%"></i></div>
+          <p class="footnote" id="adr-note">Rough illustration: it compounds the roughly 3%-per-point hazard ratio from Corley et al.<a href="#src-1">[1]</a> It is not a prediction for any one patient.</p>
+        </div>
+      </div>
+
+      <!-- B. how it works -->
+      <div class="deep-block flip">
+        <div class="prose">
+          <h3>How the green box works</h3>
+          <p><strong>Computer-aided detection</strong>, or CADe, is a convolutional neural network that watches the colonoscope's video feed frame by frame and draws a box over anything that looks like a polyp, in under 40 milliseconds, using object-detection designs from the YOLO family (“You Only Look Once”).</p>
+          <p>The first system to clear the U.S. FDA was <strong>GI Genius</strong>, in April 2021, through the De Novo pathway (DEN200055).<sup class="cite"><a href="#src-2">[2]</a></sup> The FDA's conditions matter: it is an adjunct. It cannot diagnose, it cannot replace a biopsy, and the doctor still decides what to remove.</p>
+          <p>Flip the switch to see what changes. The round polyp is easy. The flat, pale patch at the upper left is a <strong>sessile serrated lesion</strong>, the kind human eyes miss most, and the kind AI helps most with. In one trial, right-sided serrated lesion detection doubled, from 12.3% to 24.8%, when AI was combined with a fold-flattening cuff.</p>
+        </div>
+        <div class="panel demo-wrap">
+          <div class="toggle-row">
+            <label class="switch" for="ai-toggle">
+              <input type="checkbox" id="ai-toggle" checked>
+              <span class="track" aria-hidden="true"></span>
+              <span>AI detection</span>
+            </label>
+            <span class="det-count">detections: <b id="det-count">2</b></span>
+          </div>
+          <div id="demo-scope"></div>
+          <div class="demo-legend">
+            <span class="p1">Pedunculated polyp, the obvious kind</span>
+            <span class="p2">Flat sessile serrated lesion, the kind that hides</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- C. evidence -->
+      <div class="deep-block">
+        <div class="prose">
+          <h3>What the trials found</h3>
+          <p>Randomized trials have now compared the same doctors with and without the box, including a meta-analysis of 44 trials and 36,201 patients.<sup class="cite"><a href="#src-3">[3]</a></sup> The pattern is consistent: more adenomas found, especially the small and flat ones, with no spike in needless biopsies.</p>
+          <p>A Danish multicenter trial of 795 patients pushed the screening-population ADR from 58.1% to 74.4%.<sup class="cite"><a href="#src-5">[5]</a></sup> The gains come disproportionately from 1 to 5 mm adenomas and flat lesions, exactly the ones that tandem studies show humans miss.</p>
+          <p>Research from Dr. Tyler Berzin's group at Beth Israel Deaconess and Harvard showed that even small public video datasets, stretched with augmentation, can train a network to 0.73 sensitivity and 0.96 specificity, catching serrated adenomas in 93% of positive images.<sup class="cite"><a href="#src-23">[23]</a></sup></p>
+        </div>
+        <div class="panel">
+          <h4>Adenoma detection rate, with and without AI</h4>
+          <div class="chart" id="evidence-chart">
+            <div class="legend"><span class="s0"><i></i>Without AI</span><span class="s1"><i></i>With AI</span></div>
+            <div class="rows" id="evidence-rows"></div>
+            <div class="axis"><span>0%</span><span>20%</span><span>40%</span><span>60%</span><span>80%</span></div>
+            <details class="table">
+              <summary>View as a table</summary>
+              <div class="table-scroll"><table id="evidence-table"></table></div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><span class="label">Adenoma miss rate</span><span class="pair"><span class="from">35.3%</span><span class="to">16.1%</span></span><span class="note">Cut by more than half when AI is on <a href="#src-3">[3]</a><a href="#src-4">[4]</a></span></div>
+        <div class="stat"><span class="label">Adenomas found per colonoscopy</span><span class="pair"><span class="from">1.11</span><span class="to">1.35</span></span><span class="note">Patients with several lesions get fully cleared in one visit</span></div>
+        <div class="stat"><span class="label">Harmless tissue removed by mistake</span><span class="pair"><span class="from">17.1%</span><span class="to">15.1%</span></span><span class="note">No significant change (p = 0.54). The extra finds are real adenomas, not junk</span></div>
+      </div>
+
+      <!-- D. economics -->
+      <div class="deep-block">
+        <div class="prose">
+          <h3>Who pays for the box?</h3>
+          <p>In the United States, procedures are billed with <abbr title="Current Procedural Terminology">CPT</abbr> codes, and there is no code for AI-assisted detection. A hospital eats roughly $10 per procedure in licensing, while the savings, cancers that never need treating, land with insurers years later.</p>
+          <p>Health economists test this with Markov models that follow millions of simulated patients for life and count cost per <abbr title="Quality-adjusted life year">QALY</abbr>. The verdict is that AI colonoscopy is a <strong>dominant strategy</strong>: better outcomes and lower total cost, in up to 73.4% of the scenarios tested.<sup class="cite"><a href="#src-8">[8]</a><a href="#src-24">[24]</a></sup></p>
+          <p>The lesson is bigger than one device. The affordability crisis cannot be fixed by shaving upfront costs. It needs payment that rewards preventing disease rather than performing procedures.</p>
+        </div>
+        <div class="panel">
+          <h4>Lifetime ledger, per screened person (Markov model, FIT-positive cohort)</h4>
+          <table class="ledger">
+            <thead><tr><th>Line item</th><th class="num">Without AI</th><th class="num">With AI</th></tr></thead>
+            <tbody>
+              <tr><td>Screening colonoscopy</td><td class="num">€101.25</td><td class="num up">€111.75</td></tr>
+              <tr><td>Polyp removal and follow-up</td><td class="num">€150.32</td><td class="num up">€153.85</td></tr>
+              <tr><td>Late-stage cancer care</td><td class="num">higher</td><td class="num down">€1,073.80</td></tr>
+              <tr class="total"><td>Net lifetime savings with AI</td><td class="num"></td><td class="num down">€4.91 to €14.34</td></tr>
+            </tbody>
+          </table>
+          <p class="footnote">Per cohort the model prevented 134 colorectal cancers and 56 deaths: 7.4% fewer cases and 7.6% fewer deaths, plus 0.027 extra quality-adjusted life years per person.<a href="#src-8">[8]</a></p>
+        </div>
+      </div>
+
+      <!-- E. CADx -->
+      <div class="deep-block flip">
+        <div class="prose">
+          <h3>Detection is solved. Diagnosis isn't.</h3>
+          <p>Detection has a cousin: <strong>computer-aided diagnosis</strong>, or CADx, which tries to tell a precancerous adenoma from a harmless hyperplastic polyp on screen, in real time. If it could reach a 90% negative predictive value for polyps 5 mm and under, the threshold the American Society for Gastrointestinal Endoscopy set in its <abbr title="Preservation and Incorporation of Valuable Endoscopic Innovations">PIVI</abbr> statement, doctors could <strong>resect and discard</strong> tiny polyps without sending them to pathology, saving an estimated $1 billion a year in the U.S.<sup class="cite"><a href="#src-7">[7]</a></sup></p>
+          <p>In multicenter trials CADx accuracy has hovered around 78 to 81%, short of the bar. And one microsimulation found a twist: human-only resect-and-discard cuts the carbon footprint of shipping and processing specimens, but running CADx servers emitted more CO₂ than the pathology it replaced.</p>
+          <p>So detection is becoming the standard of care, while diagnosis is still an experiment. A tool can be clinically fascinating and still fail on economics, uncertainty, and liability.</p>
+        </div>
+        <div class="panel glossary">
+          <h4>Terms used on this page</h4>
+          <dl>
+            <dt>ADR</dt><dd>Adenoma detection rate. Share of screening colonoscopies that find at least one precancerous adenoma. Benchmark 25%.</dd>
+            <dt>AMR</dt><dd>Adenoma miss rate. Share of adenomas a first colonoscopy failed to see, measured by an immediate second one.</dd>
+            <dt>CADe</dt><dd>Computer-aided detection. Finds things. Draws the box.</dd>
+            <dt>CADx</dt><dd>Computer-aided diagnosis. Characterizes things. Guesses what the polyp is.</dd>
+            <dt>SSL</dt><dd>Sessile serrated lesion. Flat, pale, precancerous, and easy to miss.</dd>
+            <dt>NPV</dt><dd>Negative predictive value. When the tool says “harmless,” how often it is right.</dd>
+            <dt>Interval cancer</dt><dd>A cancer found between scheduled screenings, usually from a missed polyp.</dd>
+            <dt>De Novo</dt><dd>The FDA pathway for a new, low-to-moderate-risk device with no existing equivalent.</dd>
+          </dl>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= THE CATCH ================= -->
+<section id="catch">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The catch</p>
+      <h2>Four things the brochure leaves out</h2>
+      <p class="lede">Putting an algorithm in the room changes the humans in it. These are the problems researchers have actually measured.</p>
+    </div>
+    <div class="catch-grid">
+      <article class="catch">
+        <p class="num">Problem 1</p>
+        <h3>False alarms and alert fatigue</h3>
+        <p>The networks are tuned to miss nothing, so they also flag folds, bubbles, fluid, and the scope's own shadow. Mucosal folds alone caused 39.4% of false alerts in one commercial system and 33.9% in another. Depending on the system, false boxes appear anywhere from under 1 to over 37 times per minute.</p>
+        <p>Doctors drowning in alerts start ignoring them. Older medication-safety alerts were overridden 49 to 96% of the time, and a box nobody trusts is a distraction, not an aid.</p>
+        <p class="fix"><strong>The fix:</strong> tune thresholds, tier the alerts, and go quiet while a polyp is already being removed.</p>
+      </article>
+      <article class="catch">
+        <p class="num">Problem 2</p>
+        <h3>Deskilling</h3>
+        <p>In 2025, researchers followed 19 experienced endoscopists in Poland, each with over 2,000 procedures, after months of routine AI use, then measured them with the AI switched off.<sup class="cite"><a href="#src-6">[6]</a></sup></p>
+        <div class="mini-bars" role="img" aria-label="Unassisted adenoma detection rate fell from 28.4 percent before AI exposure to 22.4 percent after">
+          <div class="mini before"><span>Before AI</span><i style="--w:71%"></i><b>28.4%</b></div>
+          <div class="mini after"><span>After AI (AI off)</span><i style="--w:56%"></i><b>22.4%</b></div>
+        </div>
+        <p>Surgeons dropped 8.3 points, and some high-performing centers fell by more than 12. The authors called it the Google Maps effect: hand a task to reliable automation and people stop looking as hard.</p>
+        <p class="fix"><strong>The fix:</strong> track unassisted performance, train without the overlay, keep the human deciding.</p>
+      </article>
+      <article class="catch">
+        <p class="num">Problem 3</p>
+        <h3>Nobody is paid to use it</h3>
+        <p>No CPT code means no reimbursement. The hospital pays for the license; the insurer collects the savings. Until payment rewards prevention over volume, adoption stalls even when every model says society wins.<sup class="cite"><a href="#src-8">[8]</a></sup></p>
+        <p class="fix"><strong>The fix:</strong> value-based payment that rewards fewer late-stage cancers, not more procedures.</p>
+      </article>
+      <article class="catch">
+        <p class="num">Problem 4</p>
+        <h3>Nobody told the patient</h3>
+        <p>Hospital IT departments rolled these tools out faster than anyone wrote a consent form. Only 16% of adults know AI was used in their care; 46% have no idea.<sup class="cite"><a href="#src-9">[9]</a></sup> A generic line buried in a ten-page portal agreement satisfies the letter of transparency and none of its intent.</p>
+        <p class="fix"><strong>The fix:</strong> say it out loud, in the room, and let people opt out of the parts they can.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PATIENTS ================= -->
+<section id="patients">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">What patients think</p>
+      <h2>People want to be told</h2>
+      <p class="lede">Pew Research Center surveyed U.S. adults in June 2026.<sup class="cite"><a href="#src-9">[9]</a></sup> The gap between how much AI is used and how much people know about it is the whole reason this page exists.</p>
+    </div>
+    <div class="pew-grid" id="pew-grid"></div>
+    <div class="prose" style="margin-top:28px">
+      <p>Here is the paradox. The same public that distrusts AI in the exam room uses it at home: 34% of adults ask chatbots health questions, 28% to get information fast, 25% to figure out symptoms, and 18% to raise things they feel too uncomfortable to tell a human. People do not fear the tool. They fear not being told, and not having a say.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ASK ================= -->
+<section id="ask">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Take it with you</p>
+      <h2>Six questions to ask your doctor</h2>
+      <p class="lede">None of these are rude. Most doctors will be glad you asked.</p>
+    </div>
+    <div class="ask">
+      <ol id="ask-list">
+        <li><div><q>Do you use any AI tools when you look at my scans, slides, or scope video?</q><span>Radiology, pathology, and endoscopy are where it is most common.</span></div></li>
+        <li><div><q>Is this visit being recorded or transcribed by an AI scribe? Can I opt out?</q><span>Ambient scribes are the fastest-spreading AI in primary care. 72% of people want to be told.</span></div></li>
+        <li><div><q>If the AI flags something, who makes the final call?</q><span>Every FDA authorization so far is for an adjunct. The answer should be a person.</span></div></li>
+        <li><div><q>What is your adenoma detection rate?</q><span>For a colonoscopy, this is the expert question. Benchmark is 25%; 35% and up is excellent. Many endoscopists know their number.</span></div></li>
+        <li><div><q>Was this tool tested on patients like me?</q><span>Models trained on one population can quietly underperform on another.</span></div></li>
+        <li><div><q>Does the hospital keep checking whether the AI still works?</q><span>Leading systems run shadow-mode tests and ongoing monitoring, the way they would for a new drug.</span></div></li>
+      </ol>
+      <aside>
+        <button class="btn" type="button" id="copy-questions">Copy the six questions</button>
+        <p class="copied" id="copy-status" aria-live="polite"></p>
+        <p class="footnote">Mass General Brigham treats new AI like a new drug: multidisciplinary review, shadow-mode testing where the model runs without doctors seeing its output, then real-world monitoring for accuracy, bias, and whether it actually helps. Ask whether your hospital does the same.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SOURCES ================= -->
+<section id="sources">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Sources</p>
+      <h2>Read more</h2>
+      <p class="lede">Bracketed numbers on this page link here. Primary papers first, then the Wikipedia articles for background.</p>
+    </div>
+    <div class="refs-split">
+      <div>
+        <h3>Cited sources</h3>
+        <ol class="refs">
+          <li id="src-1"><span>Corley DA et al. “Adenoma detection rate and risk of colorectal cancer and death.” <em>New England Journal of Medicine</em>, 2014. <a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1309086" target="_blank" rel="noopener">nejm.org</a></span></li>
+          <li id="src-2"><span>U.S. Food and Drug Administration. “FDA authorizes marketing of first device that uses artificial intelligence to help detect potential signs of colon cancer.” April 9, 2021. <a href="https://www.fda.gov/news-events/press-announcements/fda-authorizes-marketing-first-device-uses-artificial-intelligence-help-detect-potential-signs-colon" target="_blank" rel="noopener">fda.gov</a></span></li>
+          <li id="src-3"><span>Soleymanjahi S et al. “Artificial intelligence-assisted colonoscopy for polyp detection: a systematic review and meta-analysis” (44 randomized trials, 36,201 cases). <em>Annals of Internal Medicine</em>, 2024. <a href="https://pubmed.ncbi.nlm.nih.gov/39216648/" target="_blank" rel="noopener">pubmed.gov</a></span></li>
+          <li id="src-4"><span>Wallace MB et al. “Impact of artificial intelligence on miss rate of colorectal neoplasia.” <em>Gastroenterology</em>, 2022. <a href="https://www.mayoclinic.org/medical-professionals/news/ai-assisted-colonoscopies-reduce-miss-rate-by-50-percent/mac-20536196" target="_blank" rel="noopener">mayoclinic.org summary</a></span></li>
+          <li id="src-5"><span>“Improvement in adenoma detection rate by artificial intelligence-assisted colonoscopy: multicenter quasi-randomized controlled trial.” <em>Endoscopy International Open</em>, 2025. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11866038/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li id="src-6"><span>Budzyń K et al. “Endoscopist deskilling risk after exposure to artificial intelligence in colonoscopy: a multicentre, observational study.” <em>The Lancet Gastroenterology &amp; Hepatology</em>, 2025. <a href="https://pubmed.ncbi.nlm.nih.gov/40816301/" target="_blank" rel="noopener">pubmed.gov</a></span></li>
+          <li id="src-7"><span>Rex DK et al. “The American Society for Gastrointestinal Endoscopy PIVI on real-time endoscopic assessment of the histology of diminutive colorectal polyps.” <em>Gastrointestinal Endoscopy</em>, 2011. <a href="https://doi.org/10.1016/j.gie.2011.01.023" target="_blank" rel="noopener">doi.org</a></span></li>
+          <li id="src-8"><span>Cost-effectiveness of computer-aided detection in colonoscopy for FIT-positive patients: a lifetime Markov model. <em>Endoscopy International Open</em>, 2025. <a href="https://www.thieme-connect.de/products/ejournals/html/10.1055/a-2509-7278" target="_blank" rel="noopener">thieme-connect.de</a></span></li>
+          <li id="src-9"><span>Pew Research Center. “Americans want transparency when AI is used in their healthcare.” August 25, 2026. <a href="https://www.pewresearch.org/short-reads/2026/08/25/americans-want-transparency-when-ai-is-used-in-their-healthcare/" target="_blank" rel="noopener">pewresearch.org</a></span></li>
+          <li id="src-10"><span>Pew Research Center. “60% of Americans would be uncomfortable with provider relying on AI in their own health care.” February 22, 2023. <a href="https://www.pewresearch.org/science/2023/02/22/60-of-americans-would-be-uncomfortable-with-provider-relying-on-ai-in-their-own-health-care/" target="_blank" rel="noopener">pewresearch.org</a></span></li>
+          <li id="src-11"><span>U.S. Food and Drug Administration. “Artificial Intelligence-Enabled Medical Devices” (the running list). <a href="https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-enabled-medical-devices" target="_blank" rel="noopener">fda.gov</a></span></li>
+          <li id="src-12"><span>Mass General Brigham. “AI screening for clinical trial speeds up enrollment” (RECTIFIER; randomized trial published in <em>JAMA</em>, 2025; accuracy study in <em>NEJM AI</em>, 2024). <a href="https://news.massgeneralbrigham.org/en/ai-screening-for-clinical-trial-speeds-up-enrollment" target="_blank" rel="noopener">massgeneralbrigham.org</a></span></li>
+          <li id="src-13"><span>Lång K et al. “Artificial intelligence-supported screen reading versus standard double reading in the Mammography Screening with Artificial Intelligence trial (MASAI).” <em>The Lancet Oncology</em>, 2023. <a href="https://pubmed.ncbi.nlm.nih.gov/37541274/" target="_blank" rel="noopener">pubmed.gov</a></span></li>
+          <li id="src-14"><span>U.S. Food and Drug Administration. “FDA permits marketing of artificial intelligence-based device to detect certain diabetes-related eye problems” (IDx-DR). April 2018. <a href="https://www.fda.gov/news-events/press-announcements/fda-permits-marketing-artificial-intelligence-based-device-detect-certain-diabetes-related-eye" target="_blank" rel="noopener">fda.gov</a></span></li>
+          <li id="src-15"><span>Esteva A et al. “Dermatologist-level classification of skin cancer with deep neural networks.” <em>Nature</em>, 2017. <a href="https://www.nature.com/articles/nature21056" target="_blank" rel="noopener">nature.com</a></span></li>
+          <li id="src-16"><span>Attia ZI et al. “Screening for cardiac contractile dysfunction using an artificial intelligence-enabled electrocardiogram.” <em>Nature Medicine</em>, 2019. <a href="https://www.nature.com/articles/s41591-018-0240-2" target="_blank" rel="noopener">nature.com</a></span></li>
+          <li id="src-17"><span>Wong A et al. “External validation of a widely implemented proprietary sepsis prediction model in hospitalized patients.” <em>JAMA Internal Medicine</em>, 2021. <a href="https://doi.org/10.1001/jamainternmed.2021.2626" target="_blank" rel="noopener">doi.org</a></span></li>
+          <li id="src-18"><span>Kather JN et al. “Deep learning can predict microsatellite instability directly from histology in gastrointestinal cancer.” <em>Nature Medicine</em>, 2019. <a href="https://www.nature.com/articles/s41591-019-0462-y" target="_blank" rel="noopener">nature.com</a></span></li>
+          <li id="src-19"><span>U.S. Food and Drug Administration. “FDA authorizes software that can help identify prostate cancer” (Paige Prostate). September 2021. <a href="https://www.fda.gov/news-events/press-announcements/fda-authorizes-software-can-help-identify-prostate-cancer" target="_blank" rel="noopener">fda.gov</a></span></li>
+          <li id="src-20"><span>U.S. Food and Drug Administration. “FDA permits marketing of clinical decision support software for alerting providers of a potential stroke in patients” (Viz.ai). February 2018. <a href="https://www.fda.gov/news-events/press-announcements/fda-permits-marketing-clinical-decision-support-software-alerting-providers-potential-stroke" target="_blank" rel="noopener">fda.gov</a></span></li>
+          <li id="src-21"><span>Tierney AA et al. “Ambient artificial intelligence scribes to alleviate the burden of clinical documentation.” <em>NEJM Catalyst</em>, 2024. <a href="https://catalyst.nejm.org/doi/full/10.1056/CAT.23.0404" target="_blank" rel="noopener">catalyst.nejm.org</a></span></li>
+          <li id="src-22"><span>The Nobel Prize in Chemistry 2024 (Baker, Hassabis, Jumper: computational protein design and AlphaFold). <a href="https://www.nobelprize.org/prizes/chemistry/2024/press-release/" target="_blank" rel="noopener">nobelprize.org</a></span></li>
+          <li id="src-23"><span>Berzin TM and colleagues, Center for Advanced Endoscopy, Beth Israel Deaconess Medical Center: deep-learning polyp detection from public endoscopy video. <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Berzin+TM+polyp+detection+deep+learning" target="_blank" rel="noopener">pubmed.gov search</a></span></li>
+          <li id="src-24"><span>“Cost-effectiveness of artificial intelligence-aided colonoscopy for adenoma detection in colon cancer screening.” Markov model, lifetime horizon. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10235593/" target="_blank" rel="noopener">pmc.ncbi.nlm.nih.gov</a></span></li>
+        </ol>
+      </div>
+      <div>
+        <h3>Background on Wikipedia</h3>
+        <ul class="refs wiki-list" id="wiki-list"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top"><span class="dot" aria-hidden="true"></span>Is my doctor using AI?</a>
+      <p style="margin-top:12px">A passion project by Nathan, a high school student who went down this rabbit hole while writing about AI in colonoscopy and came out wanting everyone to know what the green box is. Educational only, not medical advice. Numbers come from the cited studies; the scope view is an illustration.</p>
+    </div>
+    <p class="mono">2026 · open source</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
