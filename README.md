@@ -32,4 +32,4 @@ Bracketed citations in the page (`[3]`) link to `#src-3` in the Sources section,
 
 ## Credits
 
-Fonts from Google Fonts (Archivo, Atkinson Hyperlegible). The endoscopy view is an illustration, not a patient image. Educational only, not medical advice.
+Fonts: Archivo and Atkinson Hyperlegible, self-hosted in `fonts/` under the SIL Open Font License (license files included). The endoscopy view is an illustration, not a patient image. Educational only, not medical advice.

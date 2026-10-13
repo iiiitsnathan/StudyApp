@@ -3,15 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <title>Is my doctor using AI?</title>
 <meta name="description" content="A visual, sourced guide to where artificial intelligence already shows up in medical care, specialty by specialty, with a deep dive on AI-assisted colonoscopy.">
 <meta property="og:title" content="Is my doctor using AI?">
 <meta property="og:description" content="Probably. Usually quietly. Where AI shows up in your care, what it does, and the one procedure where the evidence is strongest.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://iiiitsnathan.github.io/StudyApp/">
+<meta property="og:image" content="https://iiiitsnathan.github.io/StudyApp/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The page's opening sign, 'Is my doctor using AI?', beside an illustrated colonoscope view with AI detection boxes.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://iiiitsnathan.github.io/StudyApp/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231e252b'/%3E%3Crect x='8' y='8' width='16' height='16' fill='%23f2c230'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -198,7 +203,7 @@
     </div>
     <div class="directory">
       <ul class="board" id="spec-grid" aria-label="Directory of specialties"></ul>
-      <div class="door" id="spec-detail" aria-live="polite"></div>
+      <div class="door" id="spec-detail"></div>
     </div>
   </div>
 </section>
@@ -214,8 +219,8 @@
       <fieldset id="quiz-items">
         <legend>In the last few years, have you…</legend>
       </fieldset>
-      <div class="quiz-result" aria-live="polite">
-        <p class="verdict" id="quiz-verdict">Nothing checked yet</p>
+      <div class="quiz-result">
+        <p class="verdict" id="quiz-verdict" aria-live="polite">Nothing checked yet</p>
         <p class="empty" id="quiz-empty">Even with nothing ticked, the back office that scheduled your last visit and coded the bill almost certainly used some machine learning.</p>
         <ul class="why" id="quiz-why"></ul>
       </div>

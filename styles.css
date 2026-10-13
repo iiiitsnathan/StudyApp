@@ -7,6 +7,38 @@
    shadows, no cards: plates and rules carry the structure, and the
    reading column stays calm.
    ------------------------------------------------------------------ */
+
+/* Self-hosted fonts (latin subset), SIL Open Font License, see fonts/ */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 500 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("fonts/archivo-var.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/atkinson-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/atkinson-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/atkinson-700.woff2") format("woff2");
+}
+
 :root {
   --wall: #e6e9e8;          /* corridor wall, the page ground */
   --wall-2: #dce0df;        /* a second wing, one step darker */

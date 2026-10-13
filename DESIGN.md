@@ -207,7 +207,7 @@ Follows the system setting (prefers-color-scheme: dark), no toggle. The wall bec
 **Body Font:** Atkinson Hyperlegible (400, 700, italic, with Segoe UI, Roboto, system-ui)
 **Mono Font:** the system monospace stack, for ledger numbers, the detection counter and the scope HUD.
 
-**Character:** Archivo is narrowed (font-stretch 85 to 92%) so headings look like painted sign lettering. Atkinson Hyperlegible was designed for low-vision readers and keeps the long passages easy to read. Both load from Google Fonts in one request.
+**Character:** Archivo is narrowed (font-stretch 85 to 92%) so headings look like painted sign lettering. Atkinson Hyperlegible was designed for low-vision readers and keeps the long passages easy to read. Both are self-hosted from `fonts/` (latin subset, woff2), declared with @font-face at the top of styles.css.
 
 ### Hierarchy
 - **Display** (h1): only the title on the entrance plate, capped at 11ch so it breaks into a stacked sign.
