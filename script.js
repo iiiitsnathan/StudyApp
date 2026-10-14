@@ -376,6 +376,197 @@ function initNav() {
   document.querySelectorAll("main > section, main > .hero").forEach((sec) => io.observe(sec));
 }
 
+/* ------------------------------------------------------------------
+   Hospital map. The front page becomes an isometric floor plan with
+   one room per section and little pixel staff walking the corridor.
+   Clicking a room zooms into it and opens that section; the Map button
+   zooms back out. Without JavaScript none of this runs and the page
+   stays the plain long version.
+   ------------------------------------------------------------------ */
+// 8x12 pixel sprites, one letter per pixel; the last three rows are two walking frames.
+const BODY = ["..hhhh..", ".hhhhhh.", ".hsssss.", ".hssses.", "..ssss..", ".cccccc.", "cccccccc", "sccccccs", ".cccccc."];
+const LEGS = [[".pp..pp.", ".pp..pp.", ".bb..bb."], ["..pppp..", "..pppp..", "..bbbb.."]];
+const BOT = ["...kk...", "..kkkk..", ".mmmmmm.", ".mvvvvm.", ".mmmmmm.", "..kkkk..", ".mmmmmm.", "mmmyymmm", ".mmmmmm."];
+const WHEELS = [[".mmmmmm.", ".k.kk.k.", "..k..k.."], [".mmmmmm.", "..k..k..", ".k.kk.k."]];
+const CAST = [
+  { rows: BODY, legs: LEGS, pal: { h: "#4a3426", s: "#e8b48c", e: "#1b2126", c: "#ffffff", p: "#2c4a7a", b: "#1b2126" } }, // doctor
+  { rows: BODY, legs: LEGS, pal: { h: "#1b1b1b", s: "#a8714d", e: "#1b2126", c: "#3aa57f", p: "#3aa57f", b: "#ffffff" } }, // nurse
+  { rows: BOT, legs: WHEELS, pal: { k: "#1b2126", m: "#c9d1d6", v: "#1f5fbf", y: "#f2c230" } },                         // the AI
+  { rows: BODY, legs: LEGS, pal: { h: "#d4a84a", s: "#f2c9a4", e: "#1b2126", c: "#9cc3ee", p: "#f2c9a4", b: "#ffffff" } }, // patient
+  { rows: BODY, legs: LEGS, pal: { h: "#4f8fd0", s: "#c98e66", e: "#1b2126", c: "#4f8fd0", p: "#4f8fd0", b: "#e9eef2" } }, // surgeon
+];
+const sprite = ({ rows, legs, pal }) => {
+  const px = (rs, y0) => rs.map((r, y) => [...r].map((k, x) => pal[k] ? `<rect x="${x}" y="${y + y0}" width="1" height="1" fill="${pal[k]}"/>` : "").join("")).join("");
+  return `<svg class="px" viewBox="0 0 8 12" shape-rendering="crispEdges" aria-hidden="true">${px(rows, 0)}<g class="fa">${px(legs[0], 9)}</g><g class="fb">${px(legs[1], 9)}</g></svg>`;
+};
+// --k: lane across the floor, --t: one lap, --d: where in the lap it starts
+const walker = (who, k, t, d) => `<span class="walker" style="--k:${k};--t:${t}s;--d:-${d}s">${sprite(CAST[who % CAST.length])}</span>`;
+
+function initTour() {
+  const root = document.documentElement;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const seen = (k) => { try { return localStorage.getItem(k) === "1"; } catch { return false; } };
+  const mark = (k) => { try { localStorage.setItem(k, "1"); } catch { /* private window: shown again next visit */ } };
+
+  const hero = $(".hero");
+  const sections = [...document.querySelectorAll("main > section")];
+  const navLinks = [...document.querySelectorAll(".topbar nav a")];
+  const label = (sec) => navLinks.find((a) => a.hash === "#" + sec.id).textContent;
+  const pict = (sec) => sec.querySelector(".section-head .pict");
+  const go = `<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>`;
+
+  root.classList.add("tour");
+  const map = document.createElement("div");
+  map.className = "map";
+  // The render (Blender, see images/) is pre-projected with the same camera as the CSS floor, so it only needs scaling to line up.
+  map.innerHTML = `<picture class="art"><source media="(max-width: 900px)" srcset="images/map-phone.webp" width="1200" height="1760"><img src="images/map-desktop.webp" width="2400" height="1560" alt="" decoding="async"></picture>
+    <nav class="floor" aria-label="Hospital map">${sections.map((s, i) => {
+    const band = [...pict(s).classList].find((c) => c !== "pict");
+    return `<a class="room band-${band}" href="#${s.id}">
+        <span class="room-sign"><span class="room-name">${pict(s).outerHTML}<span>${label(s)}</span></span></span>
+        ${walker(i + 1, 0.8, 9 + (i % 3) * 3, i * 2)}
+      </a>`;
+  }).join("")}
+      <div class="corridor" aria-hidden="true">${[[0, 0.2, 40, 0], [2, 0.5, 30, 12], [3, 0.75, 52, 30], [4, 0.35, 16, 5], [1, 0.62, 44, 20]].map((w) => walker(...w)).join("")}</div>
+    </nav>
+    <div class="tutorial" hidden>
+      <svg class="scribble" viewBox="0 0 160 110" aria-hidden="true"><path d="M150 8c-30 6-70 18-96 44-12 12-22 28-30 46"/><path d="M8 80l16 20 18-14"/></svg>
+      <div class="note"><p>Click a part of the hospital to see if they use AI</p><button type="button" class="tutorial-skip">Skip</button></div>
+    </div>`;
+  hero.append(map);
+  const floor = map.querySelector(".floor"), tutorial = map.querySelector(".tutorial");
+  const rooms = [...floor.querySelectorAll(".room")];
+
+  // Each room opens with a way back to the waiting room and ends with a door to the next one.
+  const left = `<svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>`;
+  sections.forEach((s, i) => {
+    s.querySelector("h2").tabIndex = -1;
+    s.querySelector(".wrap").insertAdjacentHTML("afterbegin", `<a class="btn to-lobby" href="#top">${left}Back to the waiting room</a>`);
+    const next = sections[i + 1];
+    s.querySelector(".wrap").insertAdjacentHTML("beforeend", next
+      ? `<a class="next-room band-${[...pict(next).classList].find((c) => c !== "pict")}" href="#${next.id}">Next room: ${label(next)}${go}</a>`
+      : `<a class="next-room" href="#top">Back to the waiting room${go}</a>`);
+  });
+  const back = document.createElement("a");
+  back.className = "to-map";
+  back.href = "#top";
+  back.innerHTML = `${left}Waiting room`;
+  $(".topbar .brand").after(back);
+
+  const fit = () => {
+    root.style.setProperty("--tb", $(".topbar").offsetHeight + "px");
+    if (hero.hidden) return;
+    map.style.setProperty("--s", 1);
+    const f = floor.getBoundingClientRect(), m = map.getBoundingClientRect();
+    map.style.setProperty("--s", Math.min(m.width / f.width, m.height / f.height) * 0.86);
+  };
+
+  // Zoom the whole map in on one room (or, with out, from that room back to the full map).
+  const zoom = (room, out) => {
+    const r = room.getBoundingClientRect(), m = map.getBoundingClientRect();
+    map.style.transformOrigin = `${r.left + r.width / 2 - m.left}px ${r.top + r.height / 2 - m.top}px`;
+    if (!out) return map.classList.add("zoom");
+    map.classList.add("zoom", "snap");
+    map.offsetWidth; // apply the zoomed state before transitioning out of it
+    map.classList.remove("zoom", "snap");
+  };
+
+  let current = null;
+  const show = (sec, target) => {
+    const from = current;
+    current = sec;
+    hero.hidden = !!sec;
+    back.hidden = !sec;
+    root.classList.toggle("in-room", !!sec);
+    sections.forEach((s) => (s.hidden = s !== sec));
+    map.classList.remove("zoom");
+    if (sec) {
+      endTutorial();
+      (target || sec).scrollIntoView({ behavior: "instant" });
+      if (!target) sec.querySelector("h2").focus({ preventScroll: true });
+    } else {
+      scrollTo({ top: 0, behavior: "instant" });
+      fit();
+      const room = from && rooms[sections.indexOf(from)];
+      if (room) { if (!reduce.matches) zoom(room, true); room.focus({ preventScroll: true }); }
+    }
+  };
+  const sectionOf = (el) => sections.find((s) => s.contains(el)) || null;
+  const route = () => {
+    const t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    show(t && sectionOf(t), t && !sections.includes(t) && sectionOf(t) ? t : null);
+    if (current && history.state?.y) scrollTo({ top: history.state.y, behavior: "instant" });
+  };
+
+  // Every in-page link moves between rooms: rooms zoom in, the rest (top bar, citations, Next room) cut straight there.
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    const t = a && document.getElementById(a.hash.slice(1));
+    if (!t || e.defaultPrevented) return;
+    const sec = sectionOf(t);
+    if (sec && sec === current) return; // same room: the browser scrolls to it
+    e.preventDefault();
+    history.replaceState({ y: scrollY }, ""); // so Back returns to this spot in the room
+    history.pushState(null, "", a.hash);
+    const room = a.closest(".room");
+    if (room && !reduce.matches) {
+      zoom(room);
+      setTimeout(() => show(sec), 420);
+    } else show(sec, sec && t !== sec ? t : null);
+  });
+  addEventListener("popstate", route);
+  addEventListener("resize", fit);
+
+  const endTutorial = () => { if (!tutorial.hidden) { tutorial.hidden = true; mark("tour-tutorial"); } };
+  const startTutorial = () => { if (!seen("tour-tutorial")) tutorial.hidden = false; };
+  tutorial.querySelector(".tutorial-skip").addEventListener("click", endTutorial);
+
+  route();
+  fit();
+  document.fonts.ready.then(fit);
+  if (current) return;
+  if (seen("tour-intro")) return startTutorial();
+
+  // First visit: two title slides, then Continue.
+  const intro = document.createElement("div");
+  intro.className = "intro";
+  intro.setAttribute("role", "dialog");
+  intro.setAttribute("aria-modal", "true");
+  intro.setAttribute("aria-label", "Introduction");
+  intro.innerHTML = `<button type="button" class="intro-skip">Skip intro</button>
+    <div class="slide one"><p class="intro-title">Is my doctor using AI?</p></div>
+    <div class="slide two">
+      <p class="intro-title">Yes, and you probably didn't notice.</p>
+      <p class="intro-lede">${$("#answer .lede").innerHTML}</p>
+      <button type="button" class="btn primary intro-go">Continue${go}</button>
+    </div>`;
+  document.body.append(intro);
+  const behind = [$(".skip-link"), $(".topbar"), $("main"), $("footer")];
+  behind.forEach((e) => (e.inert = true));
+  root.classList.add("intro-open");
+  intro.querySelector(".intro-skip").focus();
+
+  const step = setTimeout(() => {
+    intro.classList.add("two");
+    intro.querySelector(".intro-go").focus({ preventScroll: true });
+  }, reduce.matches ? 0 : 1700);
+  const close = () => {
+    clearTimeout(step);
+    mark("tour-intro");
+    behind.forEach((e) => (e.inert = false));
+    root.classList.remove("intro-open");
+    intro.classList.add("leaving");
+    setTimeout(() => intro.remove(), reduce.matches ? 0 : 400);
+    startTutorial();
+    $(".hero h1").tabIndex = -1;
+    $(".hero h1").focus({ preventScroll: true });
+    removeEventListener("keydown", onKey);
+  };
+  const onKey = (e) => { if (e.key === "Escape") close(); };
+  addEventListener("keydown", onKey);
+  intro.addEventListener("click", (e) => { if (e.target.closest(".intro-skip, .intro-go, a")) close(); });
+}
+
 renderSpecialties();
 renderQuiz();
 initAdr();
@@ -383,3 +574,4 @@ initDemo();
 renderEvidence();
 initCopy();
 initNav();
+initTour();

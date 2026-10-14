@@ -2,8 +2,8 @@
 name: Is my doctor using AI?
 description: A single-page explainer built as a hospital wayfinding system.
 colors:
-  wall: "#e6e9e8"
-  wall-2: "#dce0df"
+  wall: "#f4f5f3"
+  wall-2: "#e9ece9"
   paper: "#ffffff"
   plate: "#1e252b"
   plate-2: "#2a333a"
@@ -11,7 +11,7 @@ colors:
   on-plate-2: "#b9c2c9"
   ink: "#1b2126"
   ink-2: "#47515a"
-  rule: "#c4cbcb"
+  rule: "#d3d8d5"
   rule-strong: "#1b2126"
   link: "#1b56ad"
   yellow: "#f2c230"
@@ -32,15 +32,15 @@ typography:
     fontSize: "clamp(2.9rem, 6.4vw, 5.4rem)"
     fontWeight: 800
     lineHeight: 0.96
-    letterSpacing: "-0.025em"
-    fontVariation: "'wdth' 85"
+    letterSpacing: "-0.03em"
+    fontVariation: "'wdth' 94"
   headline:
     fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
-    fontSize: "clamp(2.15rem, 3.8vw, 2.9rem)"
+    fontSize: "clamp(2rem, 3.4vw, 2.6rem)"
     fontWeight: 700
-    lineHeight: 1.08
+    lineHeight: 1.1
     letterSpacing: "-0.02em"
-    fontVariation: "'wdth' 88"
+    fontVariation: "'wdth' 98"
   title:
     fontFamily: "Archivo, Helvetica Neue, Arial, sans-serif"
     fontSize: "1.7rem"
@@ -80,6 +80,11 @@ typography:
     fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
     fontSize: "0.9rem"
     fontWeight: 400
+  handwriting:
+    fontFamily: "Caveat, Segoe Print, cursive"
+    fontSize: "2rem"
+    fontWeight: 600
+    lineHeight: 1.05
 rounded:
   none: "0px"
 spacing:
@@ -160,7 +165,7 @@ The page works like the signs in a hospital. Grey corridor walls are the page ba
 Everything is built from plates and rules. Charcoal plates mean "this is a sign". White paper means "this is a form or a door you can open". A 2px ink rule means "a new piece of content starts here". Nothing floats, nothing has rounded corners, and no content sits in a card. No raster images ship: every illustration, icon and favicon is inline SVG or CSS.
 
 **Key Characteristics:**
-- Grey wall background, charcoal sign plates, white paper only for forms and door plates.
+- Clinical white walls, signs in solid wayfinding colour, white paper for forms and door plates. Charcoal only for the top bar.
 - Square pictogram tags in four wayfinding colours: information blue, procedure green, emergency red, caution yellow.
 - Yellow means "go here / do this", so it is kept rare.
 - Square corners, no shadows, no cards anywhere.
@@ -168,7 +173,7 @@ Everything is built from plates and rules. Charcoal plates mean "this is a sign"
 
 ## Colors
 
-A cool, grey hospital corridor with charcoal signs. Strong colour appears only on wayfinding tags, data and actions.
+A bright, clean hospital corridor whose signs are solid wayfinding colour: blue, green or yellow. Charcoal is kept for the top bar; everything else is white and near-white, so the colour reads as direction.
 
 ### Primary
 - **Direction Yellow** (yellow): the you-are-here bar under the current top-bar link, the square brand mark, primary buttons, the text link on the entrance plate, the skip link, text selection, the highlighted source row when you jump to a citation, and the one caution pictogram. Hover uses **Lit Yellow** (yellow-hover). Text on yellow is always ink (#1b2126), in light and dark mode.
@@ -186,7 +191,7 @@ A cool, grey hospital corridor with charcoal signs. Strong colour appears only o
 - **Corridor Wall** (wall): page background. **Second Wing** (wall-2): one step darker, used for the colonoscopy section band and empty meter tracks.
 - **Paper** (paper): the check-in sheet, the door plate and the selected directory row only.
 - **Charcoal Plate** (plate) and **Hover Plate** (plate-2): top bar, sign plates, entrance plate, directory board, result ticket, footer.
-- **On Plate** (on-plate) and **Muted On Plate** (on-plate-2): text on charcoal.
+- **On Plate** (on-plate) and **Muted On Plate** (on-plate-2): text on charcoal and on coloured signs.
 - **Ink** (ink) and **Muted Ink** (ink-2): body text and secondary text on the wall.
 - **Rule** (rule): 1px dividers between rows. **Strong Rule** (rule-strong): the 2px and 4px rules that start a block of content.
 - **Link Blue** (link): inline links, underlined 1px, 2px on hover.
@@ -206,8 +211,9 @@ Follows the system setting (prefers-color-scheme: dark), no toggle. The wall bec
 **Display Font:** Archivo (variable width 75 to 100, weight 500 to 800, with Helvetica Neue, Arial)
 **Body Font:** Atkinson Hyperlegible (400, 700, italic, with Segoe UI, Roboto, system-ui)
 **Mono Font:** the system monospace stack, for ledger numbers, the detection counter and the scope HUD.
+**Handwriting:** Caveat (500 to 700), used only for the first-visit note on the hospital map, as if someone pencilled a hint onto a slip of paper.
 
-**Character:** Archivo is narrowed (font-stretch 85 to 92%) so headings look like painted sign lettering. Atkinson Hyperlegible was designed for low-vision readers and keeps the long passages easy to read. Both are self-hosted from `fonts/` (latin subset, woff2), declared with @font-face at the top of styles.css.
+**Character:** Archivo runs at or near its normal width (94 to 100%) so headings read like clean modern sign lettering rather than a squeezed poster; small labels stay at 92%. Atkinson Hyperlegible was designed for low-vision readers and keeps the long passages easy to read. Both are self-hosted from `fonts/` (latin subset, woff2), declared with @font-face at the top of styles.css.
 
 ### Hierarchy
 - **Display** (h1): only the title on the entrance plate, capped at 11ch so it breaks into a stacked sign.
@@ -233,9 +239,11 @@ Follows the system setting (prefers-color-scheme: dark), no toggle. The wall bec
 
 ## Elevation & Depth
 
-Flat. There are no shadows anywhere (box-shadow is never used). Depth comes from material: grey wall, darker second-wing band, white paper and charcoal plate. The only layering is the sticky top bar, door plate and result ticket, and they rely on their solid fill, not a shadow.
+Flat. There are no shadows anywhere (box-shadow is never used). Depth comes from material: near-white wall, a darker second-wing band, white paper and solid-colour signs. The only layering is the sticky top bar, door plate and result ticket, and they rely on their solid fill, not a shadow.
 
 **The Mounted Flat Rule.** Things are mounted on the wall, not floating above it. If something needs to stand out, give it a plate or paper fill and a rule, never a shadow.
+
+The one real 3D space is the hospital map (below). There, depth is geometry, not shadow: a rendered isometric floor plan with low back walls and soft, even light. The pixel people carry a 2px ink outline, not a shadow.
 
 ## Shapes
 
@@ -246,13 +254,13 @@ Every corner is square (rounded.none). Pictogram tags are fixed squares; bullet 
 ## Components
 
 ### Top bar
-Full-width charcoal strip, 58px tall, sticky. Left: the brand with a 14px yellow square mark. Right: directory links in muted Archivo; hover turns them white; the current section gets white text and a 4px yellow bar underneath (set by script.js with aria-current). Focus rings on plates are yellow.
+Full-width charcoal strip, 58px tall, sticky; the one dark element on the page. Left: the brand name, in white Archivo (no logo), then, inside a room, a yellow "← Waiting room" link (on phones it replaces the name). Right: directory links in muted Archivo; hover turns them white; the current section gets white text and a 4px yellow bar underneath (set by script.js with aria-current). Focus rings on plates are yellow.
 
 ### Entrance plate (hero)
 A charcoal plate holding a blue pictogram in the top-left corner, the h1, the lede, a yellow primary button and a yellow text link. Beside it, the scope illustration hangs on the wall with a placard caption under a 2px rule.
 
 ### Sign plate
-Every h2 sits in a charcoal plate with a square pictogram tag on its left edge, flush with the plate (64px, 52px under 560px). Pictogram colour codes the section: blue for information, green for procedures and care steps, yellow for the caution section. The tag always sits beside the heading, never stacked above it.
+Every h2 is a directional sign: a solid panel in the section's wayfinding colour (blue for information, green for procedures and care steps, yellow with ink lettering for the caution section), with the pictogram set into it on the left in the sign's own lettering colour. Lettering is Archivo 700 at normal width. The pictogram always sits beside the heading, never stacked above it.
 
 ### Buttons
 - **Primary:** yellow fill, ink text, Archivo 700, 12px 18px padding, square, optional 20px arrow. Hover goes to lit yellow.
@@ -260,10 +268,10 @@ Every h2 sits in a charcoal plate with a square pictogram tag on its left edge, 
 - **Press:** both shift down 1px. Colour transitions are 0.15s.
 
 ### Directory board and door plate (signature)
-The board is a charcoal list grouped by wing (muted wing names in normal case). Each row: a 40px wing-coloured tag, the department name, the likelihood text, and a hidden arrow. Hover lightens to the hover plate. Choosing a row inverts it to white paper with ink text and shows the arrow (aria-pressed). The door plate beside it opens with a wing-coloured header (56px tag, title, likelihood badge with a 2px border) that wipes in from the left, over a white body with headings, an example under a 2px rule, and links. The Clinics wing uses a white tag on the board and a charcoal header on the door.
+The board is a white list grouped by wing (muted wing names in normal case), rows split by 1px rules. Each row: a 40px wing-coloured tag, the department name, the likelihood text, and a hidden arrow. Hover tints to the wall colour. The chosen row fills with a 13% tint of its wing colour and shows the arrow (aria-pressed). The door plate beside it opens with a wing-coloured header (56px tag, title, likelihood badge with a 2px border) that wipes in from the left, over a white body with headings, an example under a 2px rule, and links. The Clinics wing uses charcoal for its tag and door header.
 
 ### Check-in sheet and result ticket
-The sheet is the quiz form on white paper: a legend in Archivo, then checkbox rows split by 1px rules, green accent, the label bolding when ticked. The ticket beside it is a charcoal plate with a large verdict in narrow Archivo 800 and reasons marked by small white squares.
+The sheet is the quiz form on white paper: a legend in Archivo, then checkbox rows split by 1px rules, green accent, the label bolding when ticked. The ticket beside it is a green sign with a large verdict in Archivo 800 and reasons marked by small white squares.
 
 ### Panels on the wall
 Interactive pieces in the colonoscopy section (ADR slider, scope toggle, evidence chart, ledger) are not boxes. Each starts under a 2px strong rule with 16px of space and sits directly on the wall. The readout splits into two cells with a 1px divider. Meters and bars are flat rectangles.
@@ -278,7 +286,30 @@ In the caution section, each h3 is a plain ink heading under a 4px ink rule, wit
 Six questions in a list under a 2px rule, each with a 34px green numbered square and the question in Archivo. Beside it: a yellow "Copy" button and a secondary "Print" button. In print, only the question card prints, in black on white, without the top bar, footer, buttons or pictogram.
 
 ### Footer
-The building plate: full-width charcoal, muted text, white links.
+A quiet plaque: a 1px rule across the top, muted text, ordinary links.
+
+### Hospital map (signature)
+script.js `initTour()` adds `html.tour` and turns the front page into a game-style hospital map. Without JavaScript, nothing changes and the page is the plain long version.
+- **Intro, first visit only:** "Is my doctor using AI?" fades in, then "Yes, and you probably didn't notice." with the 16% line and a yellow Continue button. Skip intro and Esc always work. Whether it has been seen is stored in localStorage (`tour-intro`).
+- **The map:** an isometric floor plan (rotateX 56°, rotateZ 45°, no perspective, so it reads like Theme Hospital). It has one room per section, four on each side of a central corridor that carries blue, green and yellow wayfinding lines.
+  - **The building is a Blender render** (`images/map-desktop.webp`, `images/map-phone.webp`, transparent WebP). It is rendered with the same orthographic camera as the CSS floor, so the render sits flat under it, scaled by `--k` (render pixels per floor unit) and centred on `--cx`/`--cy`.
+  - **Rooms:** furnished to match their section, with low back walls topped in the room's pictogram colour. The near side is cut away so you can see in.
+  - **Code stays on top:** the CSS floor above the render is invisible. It holds the room links, signs and people, so clicking, focus and labels all stay in HTML. The render is `alt=""`.
+  - **Signs:** each room has a standing sign facing you near its back wall, made of the colour band, the pictogram on a white tile and the top-bar label.
+  - **Hover and focus:** the room's floor gets a light yellow wash and a 5px yellow outline. The cursor over rooms is a large ink arrow with a yellow edge.
+  - **Phones:** the plan stands upright (rotateX 40°, no turn), with rooms in two columns on either side of the corridor.
+- **Pixel people:** 8×12 pixel sprites drawn in script.js (doctor, nurse, patient, surgeon, and a small robot for the AI), with a 2px ink outline.
+  - Five walk the corridor and one paces in each room (corridor only on phones, where the signs would hide them), turning at each end with a two-frame step.
+  - The walking runs on a registered `--p` property over the corridor's container units.
+- **Entering a room:** the map zooms 3.2× into the room you clicked in 0.42s, then that section shows as its own page. Every other section is `hidden`.
+  - Each room opens with a secondary **Back to the waiting room** button above its sign. A yellow **Waiting room** link sits in the top bar while you read. All three zoom back out to the map.
+  - Each room ends with a **Next room** door painted in the next room's colour, whose arrow nudges forward on hover. The last room's door is yellow and leads back to the waiting room.
+- **Links and history:** top-bar links, citations and Next room doors switch rooms directly. Each move is a history entry, so Back returns to the previous room at the spot you left, and a deep link like `#ask` opens that room on load.
+- **First-visit note:** a handwritten note in Caveat on a white slip points at the map (`tour-tutorial`). Entering a room or pressing Skip dismisses it.
+- **Keyboard and screen readers:** rooms are real links inside a "Hospital map" nav. Focus moves to the room's h2 on entry and back to that room on return. Sprites and the corridor are aria-hidden.
+- **Reduced motion:** the intro starts on slide two, there is no zoom, and the pixel people stand still.
+- **Always lit:** with the map on, the page keeps its light colours even in dark mode, because a hospital is lit. The plain page without JavaScript still follows the system setting.
+- **To add a room:** add a `<section id>` with a `.section-head .sign` (pictogram + h2) inside `main`, and a matching link in the top-bar nav. The map builds the room link and its sign from those. The floor grid and the render hold eight rooms, so a ninth room means re-rendering in Blender.
 
 ### Motion
 Small and functional only. Buttons and directory rows fade colour in 0.12 to 0.15s. The door plate header wipes open in 0.32s; the switch thumb slides in 0.2s; the hero scope's detection boxes pop in once (0.6s, delays 0.8s and 2s). The easing for anything that moves is cubic-bezier(0.16, 1, 0.3, 1). With prefers-reduced-motion, all of this turns off and smooth scrolling becomes instant.
@@ -289,7 +320,7 @@ Small and functional only. Buttons and directory rows fade colour in 0.12 to 0.1
 - **Do** use only the colour variables in styles.css; add new ones to both the light and dark blocks.
 - **Do** open every new section with a sign plate and a pictogram tag in the right wayfinding colour.
 - **Do** start blocks of content with a 2px strong rule instead of a box.
-- **Do** keep paper fills for forms and door plates, and charcoal for signage.
+- **Do** keep paper fills for forms and door plates, and solid wayfinding colour for signs; charcoal is the top bar only.
 - **Do** write new pictograms as 24x24 SVG line art with 2px square-capped strokes, using currentColor.
 - **Do** check text contrast in both light and dark mode; use good/bad, not green/red, for coloured text.
 
@@ -308,3 +339,4 @@ Small and functional only. Buttons and directory rows fade colour in 0.12 to 0.1
 - Pictograms are aria-hidden; the heading carries the meaning. The directory uses aria-pressed, the nav uses aria-current, the slider reports aria-valuetext, and the scope SVG has an aria-label.
 - Checkbox and switch inputs are real inputs; the switch's focus ring is drawn on its track.
 - Links with a hover state are always underlined; citations are numbered and jump to a highlighted source row.
+- The hospital map only adds to the page. Its rooms are real links in a labelled nav, the intro is a labelled modal dialog with focus on Skip and then Continue, and turning JavaScript off gives the full long page.
